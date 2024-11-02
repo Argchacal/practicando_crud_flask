@@ -1,7 +1,28 @@
-# crud basico
+import mysql.connector
 
+#Crud agregandolo a una base de dato MySQL
 class catalog:
     products=[]
+    def __init__(self, host, user, password, database):
+
+        self.conn = mysql.connector.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=database
+        )
+
+        self.cursor = self.conn.cursor(dictionary=True)
+        #create table if it does not exist
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS productos (
+            code INT AUTO_INCREMENT PRIMARY KEY,
+            description VARCHAR(255) NOT NULL,
+            quantity INT NOT NULL,
+            price DECIMAL(10, 2) NOT NULL,
+            image_url VARCHAR(255),
+            supplier INT(4))''')
+        
+        self.conn.commit()
 
     def addProduct (self, code, description, quantity, price, image, supplier):
         
